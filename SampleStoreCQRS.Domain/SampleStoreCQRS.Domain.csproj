@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SampleStoreCQRS.Domain.Core\SampleStoreCQRS.Domain.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Contexts\Checkout\Payment\CommandHandlers\" />
+    <Folder Include="Contexts\Checkout\Payment\Commands\" />
+    <Folder Include="Contexts\Checkout\Payment\Enuns\" />
+    <Folder Include="Contexts\Checkout\Payment\Models\" />
+    <Folder Include="Contexts\Inventory\" />
+  </ItemGroup>
+
+</Project>
