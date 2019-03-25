@@ -14,8 +14,8 @@ namespace SampleStoreCQRS.Tests.Contexts.Checkout.Orders.Models
     public class OrderTests
     {
         public Guid[] _ids;
-        public ICustomerRepository _customerRepository;
-        public IProductRepository _productRepository;
+        public ICustomerReaderRepository _customerRepository;
+        public IProductReaderRepository _productRepository;
 
         public ICollection<Product> _products;
         public Customer _customer;
@@ -208,7 +208,7 @@ namespace SampleStoreCQRS.Tests.Contexts.Checkout.Orders.Models
 
             _order.ApplyDiscount(cupom);
 
-            Assert.AreEqual(_order.TotalWithDicount, _order.Total - (_order.Total * 10 / 100));
+            Assert.AreEqual(_order.TotalWithDiscount, _order.Total - (_order.Total * 10 / 100));
             Assert.AreEqual(EOrderStatus.Created, _order.Status);
             Assert.AreEqual(true, _order.IsValid());
         }

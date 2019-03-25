@@ -10,6 +10,8 @@ namespace SampleStoreCQRS.Domain.Core.ValueObjects
         public DateTime Start { get; private set; }
         public DateTime End { get; private set; }
 
+        protected Period() { }
+
         protected Period(DateTime start, DateTime end)
         {
             Start = start;

@@ -6,13 +6,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SampleStoreCQRS.Domain.Core\SampleStoreCQRS.Domain.Core.csproj" />
+    <ProjectReference Include="..\SampleStoreCQRS.Infra.CrossCutting.Bus\SampleStoreCQRS.Infra.CrossCutting.Bus.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contexts\Checkout\Payment\CommandHandlers\" />
-    <Folder Include="Contexts\Checkout\Payment\Commands\" />
-    <Folder Include="Contexts\Checkout\Payment\Enuns\" />
-    <Folder Include="Contexts\Checkout\Payment\Models\" />
+    <Folder Include="Contexts\Checkout\PaymentProccess\Enuns\" />
+    <Folder Include="Contexts\Checkout\PaymentProccess\Models\" />
     <Folder Include="Contexts\Inventory\" />
   </ItemGroup>
 

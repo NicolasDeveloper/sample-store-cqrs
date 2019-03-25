@@ -10,7 +10,7 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.DomainServices
     {
         private IDiscountCuponReaderRepository _repostory;
         private IMediatorHandler _bus;
-
+        
         public DiscountCuponDomainService(
             IMediatorHandler bus,
             IDiscountCuponReaderRepository repostory) : base()

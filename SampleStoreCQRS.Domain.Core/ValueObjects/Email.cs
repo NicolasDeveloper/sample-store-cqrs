@@ -9,6 +9,11 @@ namespace SampleStoreCQRS.Domain.Core.ValueObjects
 
         public string Address { get; private set; }
 
+        protected Email()
+        {
+
+        }
+
         public Email(string address)
         {
             Address = address;

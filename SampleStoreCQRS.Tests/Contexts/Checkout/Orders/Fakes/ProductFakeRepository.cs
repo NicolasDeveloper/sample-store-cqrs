@@ -3,10 +3,11 @@ using System.Linq;
 using System.Collections.Generic;
 using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Interfaces;
 using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models;
+using SampleStoreCQRS.Tests.Contexts.Common.Repositories;
 
 namespace SampleStoreCQRS.Tests.Contexts.Checkout.Orders.Fakes
 {
-    public class ProductFakeRepository : IProductRepository
+    public class ProductFakeRepository : RepositoryFake<Product>, IProductReaderRepository
     {
         private IList<Product> _list;
 

@@ -7,10 +7,12 @@ namespace SampleStoreCQRS.Domain.Core.ValueObjects
     public class CreditCard : ValueObject<CreditCard>, IPaymentMethod
     {
 
-        public string Number { get; }
-        public int Cvv { get; }
-        public virtual string Validate { get; }
-        public virtual string PrintName { get; }
+        public string Number { get; private set; }
+        public int Cvv { get; private set; }
+        public string Validate { get; private set; }
+        public string PrintName { get; private set; }
+
+        protected CreditCard() { }
 
         public CreditCard(string number, int cvv, string validate, string printName)
         {

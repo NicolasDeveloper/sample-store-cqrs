@@ -1,7 +1,7 @@
-﻿using System.Linq;
+﻿using MediatR;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
 using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Commands.Inputs;
 using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.DomainServices;
 using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Interfaces;
@@ -23,21 +23,21 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.CommandHandlers
 
         private readonly IMediatorHandler Bus;
 
-        private IProductRepository _productRepository;
-        private ICustomerRepository _customerRepository;
+        private IProductReaderRepository _productRepository;
+        private ICustomerReaderRepository _customerRepository;
         private IOrderRepository _orderRepository;
         private DiscountCuponDomainService _cupomService;
 
         public OrderCommandHandler(
                                     DiscountCuponDomainService cupomService,
                                     IOrderRepository orderRepository,
-                                    IProductRepository productRepository,
-                                    ICustomerRepository customerRepository,
+                                    IProductReaderRepository productRepository,
+                                    ICustomerReaderRepository customerRepository,
                                     IUnitOfWork uow,
                                     IMediatorHandler bus,
                                     INotificationHandler<DomainNotification> notifications) : base(uow, bus, notifications)
         {
-            
+
             Bus = bus;
             _productRepository = productRepository;
             _customerRepository = customerRepository;
@@ -47,7 +47,7 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.CommandHandlers
 
         public Task<bool> Handle(PlaceOrderCommand message, CancellationToken cancellationToken)
         {
-            if(!message.IsValid())
+            if (!message.IsValid())
             {
                 NotifyValidationErrors(message);
                 return Task.FromResult(false);
@@ -56,7 +56,7 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.CommandHandlers
             // search the clinte on database
             var customer = _customerRepository.GetById(message.CustomerId);
 
-            if(customer == null)
+            if (customer == null)
             {
                 NotifyValidationError(new DomainNotification(message.MessageType, $"Cliente com o id {message.CustomerId} não foi localizado"));
                 return Task.FromResult(false);
@@ -78,22 +78,22 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.CommandHandlers
             var ids = products.Select(x => x.Id).ToArray();
             message.OrderItems.ToList().ForEach((x) =>
             {
-                if(ids.Contains(x.Product))
+                if (ids.Contains(x.Product))
                 {
                     var product = products.Where(y => y.Id == x.Product)?.First();
                     order.AddItem(product, x.Quantity);
-                } 
+                }
                 else
                 {
                     NotifyValidationError(new DomainNotification(message.MessageType, $"produto {x.Product} não foi encontrado"));
                 }
             });
-            
+
             // place order 
             order.Place();
 
             // apply discount if has in command
-            if(message.DiscountCupon !=  null)
+            if (message.DiscountCupon != null)
             {
                 order = _cupomService.CalcDiscount(message.DiscountCupon, order);
             }
@@ -102,13 +102,14 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.CommandHandlers
             NotifyValidationErrors(order);
 
             // save a order 
-            _orderRepository.Save(order);
+            _orderRepository.Add(order);
 
             // if already it´s ok then disparch all events
-            if(Commit())
+            if (Commit())
             {
                 DisparchEvents(order.DomainEvents);
-            } else
+            }
+            else
             {
                 NotifyValidationError(new DomainNotification(message.MessageType, "houve algum problema ao criar o pedido"));
                 return Task.FromResult(false);
@@ -146,7 +147,8 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.CommandHandlers
             if (Commit())
             {
                 DisparchEvents(order.DomainEvents);
-            } else
+            }
+            else
             {
                 NotifyValidationError(new DomainNotification(message.MessageType, "houve algum problema ao salvar status do pedido"));
                 return Task.FromResult(false);
@@ -183,7 +185,8 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.CommandHandlers
             if (Commit())
             {
                 DisparchEvents(order.DomainEvents);
-            } else
+            }
+            else
             {
                 NotifyValidationError(new DomainNotification(message.MessageType, "houve algum problema ao salvar status do pedido"));
                 return Task.FromResult(false);
@@ -220,7 +223,8 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.CommandHandlers
             if (Commit())
             {
                 DisparchEvents(order.DomainEvents);
-            } else
+            }
+            else
             {
                 NotifyValidationError(new DomainNotification(message.MessageType, "houve algum problema ao salvar status do pedido"));
                 return Task.FromResult(false);

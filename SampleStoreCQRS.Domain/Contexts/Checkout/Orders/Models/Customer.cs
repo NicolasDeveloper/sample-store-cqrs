@@ -11,6 +11,8 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
         public string Phone { get; private set; }
         public Document Document { get; private set; }
 
+        protected Customer() { }
+
         public Customer(Name name, string phone, Email email, Document document)
         {
             Name = name;

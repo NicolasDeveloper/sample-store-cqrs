@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Interfaces;
 using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models;
 using SampleStoreCQRS.Domain.Core.ValueObjects;
+using SampleStoreCQRS.Tests.Contexts.Common.Repositories;
 
 namespace SampleStoreCQRS.Tests.Contexts.Checkout.Orders.Fakes
 {
-    public class OrderFakeRepository : IOrderRepository
+    public class OrderFakeRepository : RepositoryFake<Order>, IOrderRepository
     {
         private IReadOnlyCollection<Customer> _customers;
         private IReadOnlyCollection<Product> _products;
@@ -43,16 +43,6 @@ namespace SampleStoreCQRS.Tests.Contexts.Checkout.Orders.Fakes
         public Order GetByNumber(string number)
         {
             return _orders.Where(x => x.Number == number).First();
-        }
-
-        public void Save(Order order)
-        {
-            
-        }
-
-        public void Update(Order order)
-        {
-           
         }
     }
 }

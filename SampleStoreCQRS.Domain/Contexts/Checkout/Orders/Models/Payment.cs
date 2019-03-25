@@ -10,6 +10,8 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
     {
         public CreditCard CreditCard { get; private set; }
 
+        protected Payment() { }
+
         public Payment(IPaymentMethod paymentMethod)
         {
 

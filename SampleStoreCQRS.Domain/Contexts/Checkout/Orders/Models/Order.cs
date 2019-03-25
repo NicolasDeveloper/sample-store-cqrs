@@ -23,8 +23,8 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
         public Customer Customer { get; protected set; }
         public Payment Payment { get; protected set; }
         public DiscountCupon DiscountCupon { get; protected set; }
-        public virtual decimal Total { get { return _items.Sum(x => x.Price); } }
-        public virtual decimal TotalWithDicount { get; protected set; }
+        public decimal Total { get { return _items.Sum(x => x.Price); } }
+        public decimal TotalWithDiscount { get; protected set; }
 
         protected Order() { }
 
@@ -69,7 +69,7 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
 
             // domain events
             AddEvent(new OrderStatusChangedEvent(Id, Customer, Status, Number));
-            AddEvent(new OrderPaymentProcessorEvent(Id, Customer, Payment, Number));
+            AddEvent(new OrderPlacedEvent(Id, Customer, Payment, Number));
         }
 
         // pay
@@ -129,9 +129,9 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
         public Order ApplyDiscount(DiscountCupon cupon)
         {
             DiscountCupon = cupon;
-            TotalWithDicount = Total - (Total * (cupon.Percentage / 100));
+            TotalWithDiscount = Total - (Total * (cupon.Percentage / 100));
 
-            AddEvent(new AppliedDiscountEvent(Id, Customer.Id, DiscountCupon.Cod, DiscountCupon.Percentage, Total, TotalWithDicount));
+            AddEvent(new AppliedDiscountEvent(Id, Customer.Id, DiscountCupon.Cod, DiscountCupon.Percentage, Total, TotalWithDiscount));
             
             return this;
         }

@@ -9,6 +9,8 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Commands.Inputs
         public string Number { get; set; }
         public Guid CustomerId { get; set; }
         public IList<OrderItemCommand> OrderItems { get; set; }
-        public CreditCardCommand CreditCard;
+        public CreditCardCommand CreditCard { get; set; }
     }
+
+    
 }

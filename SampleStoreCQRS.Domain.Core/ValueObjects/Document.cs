@@ -7,6 +7,9 @@ namespace SampleStoreCQRS.Domain.Core.ValueObjects
     { 
         public string Number { get; private set; }
 
+
+        protected Document() { }
+
         public Document(string number)
         {
             Number = number;

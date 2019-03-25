@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SampleStoreCQRS.Application\SampleStoreCQRS.Application.csproj" />
+    <ProjectReference Include="..\SampleStoreCQRS.Domain.Core\SampleStoreCQRS.Domain.Core.csproj" />
+    <ProjectReference Include="..\SampleStoreCQRS.Domain\SampleStoreCQRS.Domain.csproj" />
+    <ProjectReference Include="..\SampleStoreCQRS.Infra.CrossCutting.Bus\SampleStoreCQRS.Infra.CrossCutting.Bus.csproj" />
+    <ProjectReference Include="..\SampleStoreCQRS.Infra.Data\SampleStoreCQRS.Infra.Data.csproj" />
+  </ItemGroup>
+
+</Project>

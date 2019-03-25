@@ -5,6 +5,8 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
 {
     public class Product: Aggregate
     {
+        protected Product() { }
+
         public Product(
             string title,
             string description,

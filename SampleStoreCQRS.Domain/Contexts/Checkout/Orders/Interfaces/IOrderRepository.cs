@@ -1,11 +1,10 @@
 ﻿using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models;
+using SampleStoreCQRS.Domain.Core.Interfaces;
 
 namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Interfaces
 {
-    public interface IOrderRepository
+    public interface IOrderRepository: IRepository<Order>
     {
-        void Save(Order order);
-        void Update(Order order);
         Order GetByNumber(string number);
     }
 }

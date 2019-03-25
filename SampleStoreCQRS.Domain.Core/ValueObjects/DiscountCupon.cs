@@ -6,9 +6,9 @@ namespace SampleStoreCQRS.Domain.Core.ValueObjects
 {
     public class DiscountCupon : ValueObject<DiscountCupon>
     {
-        public string Cod { get; }
-        public decimal Percentage { get; }
-        public Period ValidadePeriod { get; }
+        public string Cod { get; private set; }
+        public decimal Percentage { get; private set; }
+        public Period ValidadePeriod { get; private set; }
         public virtual bool Expired => ValidadePeriod.Start < DateTime.Now && ValidadePeriod.End < DateTime.Now;
 
         protected DiscountCupon() { }

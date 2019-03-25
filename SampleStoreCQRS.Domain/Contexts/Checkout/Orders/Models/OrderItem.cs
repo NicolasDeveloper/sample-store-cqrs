@@ -7,10 +7,12 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
 {
     public class OrderItem: Aggregate
     {
-        public Product Product { get; private set; }
         public decimal Quantity { get; private set; }
         public decimal Price { get; private set; }
         public string Description { get; private set; }
+        public Product Product { get; private set; }
+
+        protected OrderItem() { }
 
         public OrderItem(Product product, decimal quantity)
         {

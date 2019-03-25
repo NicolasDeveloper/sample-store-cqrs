@@ -2,21 +2,19 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.CommandHandlers;
 using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Commands.Inputs;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Threading;
 using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.DomainServices;
 using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Enuns;
-using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.EventHandlers;
 using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Interfaces;
 using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models;
-using SampleStoreCQRS.Domain.Core.Events;
 using SampleStoreCQRS.Domain.Core.Notifications;
 using SampleStoreCQRS.Domain.Core.ValueObjects;
 using SampleStoreCQRS.Tests.Contexts.Checkout.Orders.Fakes;
 using SampleStoreCQRS.Tests.Contexts.Fake;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SampleStoreCQRS.Tests.Contexts.Checkout.Orders.Commands
 {
@@ -26,8 +24,8 @@ namespace SampleStoreCQRS.Tests.Contexts.Checkout.Orders.Commands
         private OrderCommandHandler _commandHanddler;
 
         private IOrderRepository _orderRepository;
-        private IProductRepository _productRepository;
-        private ICustomerRepository _customerRepository;
+        private IProductReaderRepository _productRepository;
+        private ICustomerReaderRepository _customerRepository;
         private IDiscountCuponReaderRepository _cuponDisountRepository;
 
         private Customer _customer;
@@ -82,7 +80,7 @@ namespace SampleStoreCQRS.Tests.Contexts.Checkout.Orders.Commands
         }
 
         [TestMethod]
-        public async Task ShoudCreateValidOrder()
+        public async Task ShoudPlaceValidOrder()
         {
             var orderItems = new List<OrderItemCommand>();
 
@@ -97,6 +95,24 @@ namespace SampleStoreCQRS.Tests.Contexts.Checkout.Orders.Commands
             }, CancellationToken.None);
 
             Assert.AreEqual(result, true);
+        }
+
+        [TestMethod]
+        public async Task ShoudPlaceInvalidCuponOrder()
+        {
+            var orderItems = new List<OrderItemCommand>();
+
+            _products.ForEach(x => { orderItems.Add(new OrderItemCommand { Product = x.Id, Quantity = 4 }); });
+
+            var result = await _commandHanddler.Handle(new PlaceOrderCommand
+            {
+                CustomerId = _customer.Id,
+                OrderItems = orderItems,
+                CreditCard = _creditCardCommand,
+                DiscountCupon = "XPTO",
+            }, CancellationToken.None);
+
+            Assert.AreEqual(result, false);
         }
 
         [TestMethod]

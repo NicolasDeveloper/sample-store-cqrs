@@ -4,10 +4,11 @@ using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Interfaces;
 using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models;
 using SampleStoreCQRS.Domain.Core.ValueObjects;
 using System;
+using SampleStoreCQRS.Tests.Contexts.Common.Repositories;
 
 namespace SampleStoreCQRS.Tests.Contexts.Checkout.Orders.Fakes
 {
-    public class CustomerFakeRepository : ICustomerRepository
+    public class CustomerFakeRepository : RepositoryFake<Customer>, ICustomerReaderRepository
     {
         private IList<Customer> _list;
 

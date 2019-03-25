@@ -14,12 +14,4 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Commands.Inputs
             return ValidationResult.IsValid;
         }
     }
-
-    public class CreditCardCommand
-    {
-        public string Number { get; set; }
-        public int Cvv { get; set; }
-        public virtual string Validate { get; set; }
-        public virtual string PrintName { get; set; }
-    }
 }

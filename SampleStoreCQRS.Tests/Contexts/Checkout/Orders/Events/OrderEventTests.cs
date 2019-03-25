@@ -17,8 +17,8 @@ namespace SampleStoreCQRS.Tests.Contexts.Checkout.Orders.Events
     {
 
         public Guid[] _ids;
-        public ICustomerRepository _customerRepository;
-        public IProductRepository _productRepository;
+        public ICustomerReaderRepository _customerRepository;
+        public IProductReaderRepository _productRepository;
 
         public ICollection<Product> _products;
         public Customer _customer;

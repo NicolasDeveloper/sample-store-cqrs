@@ -15,6 +15,7 @@ namespace SampleStoreCQRS.Domain.Core.Models
         {
             Id = Guid.NewGuid();
             Timestamp = DateTime.Now;
+            AggregateId = Id;
         }
 
         public void AddNotification(string notification)
