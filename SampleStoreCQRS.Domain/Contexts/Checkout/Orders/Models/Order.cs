@@ -1,30 +1,18 @@
 ﻿using System;
+using System.Linq;
 using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Enuns;
 using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Events;
 using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Validations.Models;
 using SampleStoreCQRS.Domain.Core.Models;
 using SampleStoreCQRS.Domain.Core.ValueObjects;
 using System.Collections.Generic;
-using System.Linq;
 using SampleStoreCQRS.Domain.Core.Interfaces;
 
 namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
 {
     public class Order : Aggregate
     {
-
-        private ICollection<OrderItem> _items;
-
-        public IReadOnlyCollection<OrderItem> Items => _items.ToArray();
-        public EOrderStatus Status { get; protected set; }
-        public string Number { get; protected set; }
-        public DateTime CreateAt { get; protected set; }
-        public DateTime UpdateAt { get; protected set; }
-        public Customer Customer { get; protected set; }
-        public Payment Payment { get; protected set; }
-        public DiscountCupon DiscountCupon { get; protected set; }
-        public decimal Total { get { return _items.Sum(x => x.Price); } }
-        public decimal TotalWithDiscount { get; protected set; }
+        protected IList<OrderItem> _items;
 
         protected Order() { }
 
@@ -38,21 +26,25 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
             Payment = payment;
             CreateAt = DateTime.Now;
             UpdateAt = DateTime.Now;
-
-            ValidationResult = new OrderValidation().Validate(this);
         }
+
+        public virtual IList<OrderItem> Items => _items.ToArray();
+        public virtual EOrderStatus Status { get; protected set; }
+
+        public virtual string Number { get; protected set; }
+        public virtual DateTime CreateAt { get; protected set; }
+        public virtual DateTime UpdateAt { get; protected set; }
+        public virtual Customer Customer { get; protected set; }
+        public virtual Payment Payment { get; protected set; }
+        public virtual DiscountCupon DiscountCupon { get; protected set; }
+        public virtual decimal Total { get { return _items.Sum(x => x.Price); } }
+        public virtual decimal TotalWithDiscount { get; protected set; }
 
         // add an item
         public void AddItem(Product product, decimal quantity)
         {
-
             var item = new OrderItem(product, quantity);
-            AddNotifications(item.ValidationResult.Errors);
-
-            if (ValidationResult.IsValid)
-            {
-                _items.Add(item);
-            }
+            _items.Add(item);
         }
 
         // place 
@@ -68,8 +60,8 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
             Number = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 8).ToUpper();
 
             // domain events
-            AddEvent(new OrderStatusChangedEvent(Id, Customer, Status, Number));
-            AddEvent(new OrderPlacedEvent(Id, Customer, Payment, Number));
+            AddEvent(new OrderStatusChangedEvent(Id, Customer.Id, Number, Status, Total, TotalWithDiscount));
+            AddEvent(new OrderPlacedEvent(Id, Customer.Id, Number, Status, Total, TotalWithDiscount, Payment));
         }
 
         // pay
@@ -84,7 +76,7 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
             Status = EOrderStatus.Paid;
 
             // domain events
-            AddEvent(new OrderStatusChangedEvent(Id, Customer, Status, Number));
+            AddEvent(new OrderStatusChangedEvent(Id, Customer.Id, Number, Status, Total, TotalWithDiscount));
         }
 
         // ship
@@ -106,7 +98,7 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
             Status = EOrderStatus.Shipped;
 
             // domain events
-            AddEvent(new OrderStatusChangedEvent(Id, Customer, Status, Number));
+            AddEvent(new OrderStatusChangedEvent(Id, Customer.Id, Number, Status, Total, TotalWithDiscount));
         }
 
         // canceled
@@ -122,7 +114,7 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
             Status = EOrderStatus.Canceled;
 
             // domain events
-            AddEvent(new OrderStatusChangedEvent(Id, Customer, Status, Number));
+            AddEvent(new OrderStatusChangedEvent(Id, Customer.Id, Number, Status, Total, TotalWithDiscount));
         }
 
         // apply discount
@@ -131,14 +123,24 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
             DiscountCupon = cupon;
             TotalWithDiscount = Total - (Total * (cupon.Percentage / 100));
 
-            AddEvent(new AppliedDiscountEvent(Id, Customer.Id, DiscountCupon.Cod, DiscountCupon.Percentage, Total, TotalWithDiscount));
+            AddEvent(new AppliedDiscountEvent(Id, Customer.Id, Number, Status, Total, TotalWithDiscount, DiscountCupon.Cod, DiscountCupon.Percentage));
             
             return this;
         }
 
         public override bool IsValid()
         {
-            return ValidationResult.IsValid;
+            ValidationResult = new OrderValidation().Validate(this);
+
+            _items.ToList().ForEach(x =>
+            {
+                if(!x.IsValid())
+                    AddValidationResults(x.ValidationResult);
+
+                AddNotifications(x.Notifications);
+            });
+            
+            return ValidationResult.IsValid && !HasNotifications;
         }
 
         public static class Factory

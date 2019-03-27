@@ -27,8 +27,4 @@
     <ProjectReference Include="..\SampleStoreCQRS.Infra.CrossCutting.IoC\SampleStoreCQRS.Infra.CrossCutting.IoC.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="_Temp\" />
-  </ItemGroup>
-
 </Project>

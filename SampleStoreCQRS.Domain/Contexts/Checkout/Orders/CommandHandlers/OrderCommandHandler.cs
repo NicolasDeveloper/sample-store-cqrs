@@ -74,6 +74,13 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.CommandHandlers
             // create an order
             var order = Order.Factory.Create(customer, new CreditCard(message.CreditCard.Number, message.CreditCard.Cvv, message.CreditCard.Validate, message.CreditCard.PrintName));
 
+            // after create then validate
+            if(!order.IsValid())
+            {
+                NotifyValidationErrors(order);
+                return Task.FromResult(false); 
+            }
+            
             // verify if some product wasn't found
             var ids = products.Select(x => x.Id).ToArray();
             message.OrderItems.ToList().ForEach((x) =>
@@ -89,17 +96,18 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.CommandHandlers
                 }
             });
 
-            // place order 
-            order.Place();
-
             // apply discount if has in command
             if (message.DiscountCupon != null)
             {
                 order = _cupomService.CalcDiscount(message.DiscountCupon, order);
             }
 
+            // place order 
+            order.Place();
+
             // if has notifications then notify the application
-            NotifyValidationErrors(order);
+            if(order.HasNotifications) 
+                DisparchNotifications(order);
 
             // save a order 
             _orderRepository.Add(order);
@@ -108,14 +116,11 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.CommandHandlers
             if (Commit())
             {
                 DisparchEvents(order.DomainEvents);
+                return Task.FromResult(true);
             }
-            else
-            {
-                NotifyValidationError(new DomainNotification(message.MessageType, "houve algum problema ao criar o pedido"));
-                return Task.FromResult(false);
-            }
-
-            return Task.FromResult(true);
+            
+            NotifyValidationError(new DomainNotification(message.MessageType, "houve algum problema ao criar o pedido"));
+            return Task.FromResult(false);
         }
 
         public Task<bool> Handle(PayOrderCommand message, CancellationToken cancellationToken)
@@ -135,11 +140,19 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.CommandHandlers
                 return Task.FromResult(false);
             }
 
+            // after create then validate
+            if (!order.IsValid())
+            {
+                NotifyValidationErrors(order);
+                return Task.FromResult(false);
+            }
+
             // pay order
             order.Pay();
 
             // if has notifications then notify the application
-            NotifyValidationErrors(order);
+            if (order.HasNotifications)
+                DisparchNotifications(order);
 
             _orderRepository.Update(order);
 
@@ -147,14 +160,11 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.CommandHandlers
             if (Commit())
             {
                 DisparchEvents(order.DomainEvents);
-            }
-            else
-            {
-                NotifyValidationError(new DomainNotification(message.MessageType, "houve algum problema ao salvar status do pedido"));
-                return Task.FromResult(false);
+                return Task.FromResult(true);
             }
 
-            return Task.FromResult(true);
+            NotifyValidationError(new DomainNotification(message.MessageType, "houve algum problema ao salvar status do pedido"));
+            return Task.FromResult(false);
         }
 
         public Task<bool> Handle(ShipOrderCommand message, CancellationToken cancellationToken)
@@ -173,11 +183,19 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.CommandHandlers
                 return Task.FromResult(false);
             }
 
+            // after create then validate
+            if (!order.IsValid())
+            {
+                NotifyValidationErrors(order);
+                return Task.FromResult(false);
+            }
+
             // ship order
             order.Ship();
 
             // if has notifications then notify the application
-            NotifyValidationErrors(order);
+            if (order.HasNotifications)
+                DisparchNotifications(order);
 
             _orderRepository.Update(order);
 
@@ -185,14 +203,11 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.CommandHandlers
             if (Commit())
             {
                 DisparchEvents(order.DomainEvents);
+                return Task.FromResult(true);
             }
-            else
-            {
-                NotifyValidationError(new DomainNotification(message.MessageType, "houve algum problema ao salvar status do pedido"));
-                return Task.FromResult(false);
-            }
-
-            return Task.FromResult(true);
+            
+            NotifyValidationError(new DomainNotification(message.MessageType, "houve algum problema ao salvar status do pedido"));
+            return Task.FromResult(false);
         }
 
         public Task<bool> Handle(CancelOrderCommand message, CancellationToken cancellationToken)
@@ -211,11 +226,19 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.CommandHandlers
                 return Task.FromResult(false);
             }
 
+            // after create then validate
+            if (!order.IsValid())
+            {
+                NotifyValidationErrors(order);
+                return Task.FromResult(false);
+            }
+
             // cancel order
             order.Cancel();
 
             // if has notifications then notify the application
-            NotifyValidationErrors(order);
+            if (order.HasNotifications)
+                DisparchNotifications(order);
 
             _orderRepository.Update(order);
 

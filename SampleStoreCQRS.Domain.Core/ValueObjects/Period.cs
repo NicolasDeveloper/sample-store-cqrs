@@ -6,9 +6,8 @@ namespace SampleStoreCQRS.Domain.Core.ValueObjects
 {
     public class Period : ValueObject<Period>
     {
-
-        public DateTime Start { get; private set; }
-        public DateTime End { get; private set; }
+        public virtual DateTime Start { get; protected set; }
+        public virtual DateTime End { get; protected set; }
 
         protected Period() { }
 
@@ -17,7 +16,7 @@ namespace SampleStoreCQRS.Domain.Core.ValueObjects
             Start = start;
             End = end;
 
-            ValidationResult = new PeriodValidation().Validate(this);
+            
         }
 
         public static Period Create(DateTime start, DateTime end) => new Period(start, end);
@@ -28,6 +27,7 @@ namespace SampleStoreCQRS.Domain.Core.ValueObjects
 
         public override bool IsValid()
         {
+            ValidationResult = new PeriodValidation().Validate(this);
             return ValidationResult.IsValid;
         }
 

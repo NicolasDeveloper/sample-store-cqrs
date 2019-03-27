@@ -33,7 +33,10 @@ namespace SampleStoreCQRS.Services.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<SampleStoreCQRSDataContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options
+                    .UseLazyLoadingProxies()
+                    .EnableDetailedErrors()
+                    .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             // add service mvc in the app
             services.AddMvc(options =>
@@ -63,7 +66,7 @@ namespace SampleStoreCQRS.Services.Api
 
             // .NET Native DI Abstraction
             RegisterServices(services);
-        } 
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

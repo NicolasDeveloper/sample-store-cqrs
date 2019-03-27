@@ -19,15 +19,13 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
             Image = image;
             Price = price;
             QuantityOnHand = quantityOnHand;
-
-            ValidationResult = new ProductValidation().Validate(this);
         }
 
-        public string Title { get; private set; }
-        public string Description { get; private set; }
-        public string Image { get; private set; }
-        public decimal Price { get; private set; }
-        public int QuantityOnHand { get; private set; }
+        public virtual string Title { get; protected set; }
+        public virtual string Description { get; protected set; }
+        public virtual string Image { get; protected set; }
+        public virtual decimal Price { get; protected set; }
+        public virtual int QuantityOnHand { get; protected set; }
 
         public override string ToString()
         {
@@ -36,6 +34,7 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
 
         public override bool IsValid()
         {
+            ValidationResult = new ProductValidation().Validate(this);
             return ValidationResult.IsValid;
         }
     }

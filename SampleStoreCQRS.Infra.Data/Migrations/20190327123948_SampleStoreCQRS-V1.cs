@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SampleStoreCQRS.Infra.Data.Migrations
 {
-    public partial class SampleStoreCQRSv1 : Migration
+    public partial class SampleStoreCQRSV1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,6 +12,7 @@ namespace SampleStoreCQRS.Infra.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    AggregateId = table.Column<Guid>(nullable: false),
                     Cod = table.Column<string>(nullable: true),
                     Percentage = table.Column<decimal>(nullable: false),
                     ValidadePeriodStart = table.Column<DateTime>(name: "ValidadePeriod.Start", nullable: false),
@@ -27,6 +28,7 @@ namespace SampleStoreCQRS.Infra.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    AggregateId = table.Column<Guid>(nullable: false),
                     NameFirstName = table.Column<string>(name: "Name.FirstName", nullable: true),
                     NameLastName = table.Column<string>(name: "Name.LastName", nullable: true),
                     EmailAddress = table.Column<string>(name: "Email.Address", nullable: true),
@@ -43,6 +45,7 @@ namespace SampleStoreCQRS.Infra.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    AggregateId = table.Column<Guid>(nullable: false),
                     CreditCardNumber = table.Column<string>(name: "CreditCard.Number", type: "varchar(19)", maxLength: 19, nullable: true),
                     CreditCardCvv = table.Column<int>(name: "CreditCard.Cvv", nullable: false),
                     CreditCardValidate = table.Column<string>(name: "CreditCard.Validate", type: "varchar(19)", maxLength: 19, nullable: true),
@@ -58,6 +61,7 @@ namespace SampleStoreCQRS.Infra.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    AggregateId = table.Column<Guid>(nullable: false),
                     Title = table.Column<string>(maxLength: 60, nullable: false),
                     Description = table.Column<string>(maxLength: 1024, nullable: false),
                     Image = table.Column<string>(nullable: true),
@@ -74,6 +78,7 @@ namespace SampleStoreCQRS.Infra.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    AggregateId = table.Column<Guid>(nullable: false),
                     Status = table.Column<int>(nullable: false),
                     Number = table.Column<string>(nullable: true),
                     CreateAt = table.Column<DateTime>(nullable: false),
@@ -107,6 +112,7 @@ namespace SampleStoreCQRS.Infra.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    AggregateId = table.Column<Guid>(nullable: false),
                     Quantity = table.Column<decimal>(nullable: false),
                     Price = table.Column<decimal>(nullable: false),
                     Description = table.Column<string>(maxLength: 1024, nullable: false),

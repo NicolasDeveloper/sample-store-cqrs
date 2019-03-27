@@ -21,7 +21,7 @@ namespace SampleStoreCQRS.Infra.Data.Contexts.Common.EventSourcing
             var storedEvent = new StoredEvent(
                 theEvent,
                 serializedData,
-                "nicolas");
+                "system");
 
             _eventStoreRepository.Store(storedEvent);
         }

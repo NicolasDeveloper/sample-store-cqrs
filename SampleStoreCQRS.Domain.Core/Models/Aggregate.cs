@@ -8,7 +8,7 @@ namespace SampleStoreCQRS.Domain.Core.Models
     public abstract class Aggregate : Entity
     {
         private IList<Event> _domainEvents = new List<Event>();
-        public IReadOnlyCollection<Event> DomainEvents => _domainEvents.ToArray();
+        public IReadOnlyCollection<Event> DomainEvents => _domainEvents?.ToArray();
 
         protected void AddEvent(Event _event)
         {

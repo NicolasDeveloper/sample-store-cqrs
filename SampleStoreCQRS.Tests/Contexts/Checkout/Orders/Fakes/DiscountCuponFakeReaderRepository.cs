@@ -4,10 +4,11 @@ using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Interfaces;
 using SampleStoreCQRS.Domain.Core.ValueObjects;
 using System.Collections.Generic;
 using SampleStoreCQRS.Tests.Contexts.Common.Repositories;
+using SampleStoreCQRS.Domain.Contexts.Promotions.Models;
 
 namespace SampleStoreCQRS.Tests.Contexts.Checkout.Orders.Fakes
 {
-    public class DiscountCuponFakeReaderRepository : RepositoryFake<DiscountCupon>, IDiscountCuponReaderRepository
+    public class DiscountCuponFakeReaderRepository : RepositoryFake<Coupon>, IDiscountCuponReaderRepository
     {
         IList<DiscountCupon> _cupons;
 

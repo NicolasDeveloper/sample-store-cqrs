@@ -30,8 +30,8 @@ namespace SampleStoreCQRS.Infra.Data.Contexts.Checkout.Orders.Mappings
 
             builder.Property(x => x.Image);
 
-            builder.Ignore(x => x.AggregateId);
             builder.Ignore(x => x.DomainEvents);
+            builder.Ignore(x => x.Notifications);
             builder.Ignore(x => x.Timestamp);
             builder.Ignore(x => x.ValidationResult);
             builder.Ignore(x => x.MessageType);

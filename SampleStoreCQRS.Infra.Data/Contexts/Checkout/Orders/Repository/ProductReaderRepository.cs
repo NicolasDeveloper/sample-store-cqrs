@@ -17,12 +17,14 @@ namespace SampleStoreCQRS.Infra.Data.Contexts.Checkout.Orders.Repository
 
         public Product GetById(Guid id)
         {
-            return DbSet.AsNoTracking().FirstOrDefault(c => c.Id == id);
+            return DbSet
+                    .AsNoTracking()
+                    .FirstOrDefault(c => c.Id == id);
         }
 
         public ICollection<Product> GetById(Guid[] ids)
         {
-            return DbSet.AsNoTracking().Where(c => ids.Contains(c.Id)).ToList();
+            return DbSet.Where(c => ids.Contains(c.Id)).ToList();
         }
     }
 }

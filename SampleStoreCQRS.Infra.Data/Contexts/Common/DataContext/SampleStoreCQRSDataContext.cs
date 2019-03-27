@@ -46,7 +46,10 @@ namespace SampleStoreCQRS.Infra.Data.Contexts.Common.DataContext
                 .Build();
 
             // define the database to use
-            optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"));
+            optionsBuilder
+                .UseLazyLoadingProxies()
+                .EnableDetailedErrors()
+                .UseSqlServer(config.GetConnectionString("DefaultConnection"));
         }
     }
 }

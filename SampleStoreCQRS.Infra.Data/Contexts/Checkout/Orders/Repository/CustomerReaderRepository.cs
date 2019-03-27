@@ -16,12 +16,12 @@ namespace SampleStoreCQRS.Infra.Data.Contexts.Checkout.Orders.Repository
         }
 
         public Customer GetByDocument(Document document) {
-            return DbSet.AsNoTracking().FirstOrDefault(x => x.Document == document);
+            return DbSet.FirstOrDefault(x => x.Document == document);
         }
 
         public Customer GetById(Guid id)
         {
-            return DbSet.AsNoTracking().FirstOrDefault(x => x.Id == id);
+            return DbSet.FirstOrDefault(x => x.Id == id);
         }
     }
 }

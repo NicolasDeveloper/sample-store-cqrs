@@ -61,6 +61,8 @@ namespace SampleStoreCQRS.Infra.CrossCutting.IoC
             // Infra - Event Data Source
             services.AddScoped<IEventStoreRepository, EventStoreSQLRepository>();
             services.AddScoped<IEventStore, SqlEventStore>();
+            services.AddScoped<EventStoreSQLContext>();
+            
         }
     }
 }

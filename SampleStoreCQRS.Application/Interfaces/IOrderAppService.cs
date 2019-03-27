@@ -5,6 +5,9 @@ namespace SampleStoreCQRS.Application.Interfaces
 {
     public interface IOrderAppService
     {
-        Task Register(OrderViewModel customerViewModel);
+        Task Place(PlaceOrderViewModel customerViewModel);
+        Task Pay(PayOrderViewModel customerViewModel);
+        Task Ship(ShipOrderViewModel customerViewModel);
+        Task Cancel(CancelOrderViewModel customerViewModel);
     }
 }

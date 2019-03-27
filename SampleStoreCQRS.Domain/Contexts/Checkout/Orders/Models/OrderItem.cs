@@ -7,10 +7,10 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
 {
     public class OrderItem: Aggregate
     {
-        public decimal Quantity { get; private set; }
-        public decimal Price { get; private set; }
-        public string Description { get; private set; }
-        public Product Product { get; private set; }
+        public virtual decimal Quantity { get; protected set; }
+        public virtual decimal Price { get; protected set; }
+        public virtual string Description { get; protected set; }
+        public virtual Product Product { get; protected set; }
 
         protected OrderItem() { }
 
@@ -20,12 +20,11 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
             Quantity = quantity;
             Price = product.Price;
             Description = product.Description;
-
-            ValidationResult = new OrderItemValidation().Validate(this);
         }
-
+        
         public override bool IsValid()
         {
+            ValidationResult = new OrderItemValidation().Validate(this);
             return ValidationResult.IsValid;
         }
     }

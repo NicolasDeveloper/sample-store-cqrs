@@ -8,17 +8,10 @@ namespace SampleStoreCQRS.Application.AutoMapper
     {
         public ViewModelToDomainMappingProfile()
         {
-            CreateMap<OrderViewModel, PlaceOrderCommand>();
-                //.ConstructUsing(c => new PlaceOrderCommand() {
-                //    CreditCard = new CreditCardCommand {
-                //       Cvv = c.CreditCard.Cvv,
-                //       Number = c.CreditCard.Number,
-                       
-                //    },
-                    
-                //});
-            //CreateMap<CustomerViewModel, UpdateCustomerCommand>()
-            //    .ConstructUsing(c => new UpdateCustomerCommand(c.Id, c.Name, c.Email, c.BirthDate));
+            CreateMap<PlaceOrderViewModel, PlaceOrderCommand>();
+            CreateMap<PayOrderViewModel, PayOrderCommand>();
+            CreateMap<ShipOrderViewModel, ShipOrderCommand>();
+            CreateMap<CancelOrderViewModel, CancelOrderCommand>();
         }
     }
 }

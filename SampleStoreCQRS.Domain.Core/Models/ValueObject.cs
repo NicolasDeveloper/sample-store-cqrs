@@ -3,14 +3,13 @@
 using System;
 using FluentValidation.Results;
 using SampleStoreCQRS.Domain.Core.Events;
-using SampleStoreCQRS.Domain.Core.Notifications;
 
 namespace SampleStoreCQRS.Domain.Core.Models
 {
     public abstract class ValueObject<T>: Message where T : ValueObject<T>
     {
-        public DateTime Timestamp { get; private set; }
-        public ValidationResult ValidationResult { get; set; }
+        public virtual DateTime Timestamp { get; protected set; }
+        public virtual ValidationResult ValidationResult { get; protected set; }
 
         public ValueObject()
         {

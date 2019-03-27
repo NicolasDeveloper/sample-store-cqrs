@@ -1,25 +1,22 @@
-﻿using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models;
-using SampleStoreCQRS.Domain.Core.Events;
+﻿using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Enuns;
+using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models;
 using System;
 
 namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Events
 {
-    public class OrderPlacedEvent : Event
+    public class OrderPlacedEvent : OrderEvent
     {
-        public Guid Id { get; private set; }
-        public Customer Customer { get; private set; }
-        public string Number { get; private set; }
         public Payment Payment { get; private set; }
 
         public OrderPlacedEvent(
-            Guid id,
-            Customer customer,
-            Payment payment,
-            string number)
+            Guid id, 
+            Guid customerId, 
+            string number, 
+            EOrderStatus status, 
+            decimal total, 
+            decimal totalWithDiscount,
+            Payment payment) : base(id, customerId, number, status, total, totalWithDiscount)
         {
-            Id = id;
-            Number = number;
-            Customer = customer;
             Payment = payment;
         }
     }

@@ -55,8 +55,8 @@ namespace SampleStoreCQRS.Infra.Data.Contexts.Checkout.Orders.Mappings
 
             builder.Ignore(x => x.Total);
             builder.Ignore(x => x.TotalWithDiscount);
+            builder.Ignore(x => x.Notifications);
             builder.Ignore(x => x.MessageType);
-            builder.Ignore(x => x.AggregateId);
             builder.Ignore(x => x.DomainEvents);
             builder.Ignore(x => x.Timestamp);
             builder.Ignore(x => x.ValidationResult);

@@ -7,21 +7,20 @@ namespace SampleStoreCQRS.Domain.Core.ValueObjects
     public class Email : ValueObject<Email>
     {
 
-        public string Address { get; private set; }
+        public virtual string Address { get; protected set; }
 
         protected Email()
         {
-
         }
 
         public Email(string address)
         {
             Address = address;
-            ValidationResult = new EmailValidation().Validate(this);
         }
 
         public override bool IsValid()
         {
+            ValidationResult = new EmailValidation().Validate(this);
             return ValidationResult.IsValid;
         }
 

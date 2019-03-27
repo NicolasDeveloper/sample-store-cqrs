@@ -147,7 +147,7 @@ namespace SampleStoreCQRS.Tests.Contexts.Checkout.Orders.Models
 
 
         [TestMethod]
-        public void ShouldntCancelInvalidOrderWhenAlreadyCancelled()
+        public void ShouldntPayWhenAlreadyCancelledInvalidOrder()
         {
             // add products in order
             _products.ToList().ForEach(x =>
@@ -186,9 +186,7 @@ namespace SampleStoreCQRS.Tests.Contexts.Checkout.Orders.Models
             // ship an order
             _order.Ship();
 
-            Assert.AreEqual(_order.Items.Count, 0);
-
-            Assert.AreEqual(true, !_order.IsValid());
+            Assert.AreEqual(false, _order.IsValid());
         }
 
         [TestMethod]

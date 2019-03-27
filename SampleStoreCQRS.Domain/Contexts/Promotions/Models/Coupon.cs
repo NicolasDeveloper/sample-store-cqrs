@@ -6,9 +6,9 @@ namespace SampleStoreCQRS.Domain.Contexts.Promotions.Models
 {
     public class Coupon : Aggregate
     {
-        public string Cod { get; private set; }
-        public decimal Percentage { get; private set; }
-        public Period ValidadePeriod { get; private set; }
+        public virtual string Cod { get; protected set; }
+        public virtual decimal Percentage { get; protected set; }
+        public virtual Period ValidadePeriod { get; protected set; }
 
         protected Coupon() { }
 

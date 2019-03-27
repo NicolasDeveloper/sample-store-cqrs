@@ -1,35 +1,27 @@
-﻿using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models;
-using SampleStoreCQRS.Domain.Core.Events;
+﻿using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Enuns;
+using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Events
 {
-    public class AppliedDiscountEvent: Event
+    public class AppliedDiscountEvent: OrderEvent
     {
 
-        public Guid OrderId { get; set; }
-        public Guid CustomerId { get; set; }
-        public string CuponCod { get; set; }
+        public string CouponCod { get; set; }
         public decimal Percentage { get; set; }
-        public decimal Total { get; set; }
-        public decimal TotalWithDiscount { get; set; }
-    
+
         public AppliedDiscountEvent(
-            Guid orderId, 
+            Guid id, 
             Guid customerId, 
-            string cuponCod, 
-            decimal percentage, 
+            string number, 
+            EOrderStatus status, 
             decimal total, 
-            decimal totalWithDiscount)
+            decimal totalWithDiscount,
+            string couponCod,
+            decimal percentage) : base(id, customerId, number, status, total, totalWithDiscount)
         {
-            OrderId = orderId;
-            CustomerId = customerId;
-            CuponCod = cuponCod;
+            CouponCod = couponCod;
             Percentage = percentage;
-            Total = total;
-            TotalWithDiscount = totalWithDiscount;
-        }        
+        }  
     }
 }

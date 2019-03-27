@@ -1,31 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentValidation.Results;
 using SampleStoreCQRS.Domain.Core.Events;
+using SampleStoreCQRS.Domain.Core.Notifications;
 
 namespace SampleStoreCQRS.Domain.Core.Models
 {
-    public abstract class Entity: Message
+    public abstract class Entity : Message
     {
-        public Guid Id { get; protected set; }
-        public DateTime Timestamp { get; private set; }
-        public ValidationResult ValidationResult { get; set; }
+        private IList<DomainNotification> _notifications = new List<DomainNotification>();
+
+        public virtual Guid Id { get; protected set; }
+        public virtual DateTime Timestamp { get; protected set; }
+        public virtual ValidationResult ValidationResult { get; protected set; }
+        public virtual IReadOnlyCollection<DomainNotification> Notifications => _notifications?.ToArray();
+        public virtual bool HasNotifications => _notifications?.Count > 0;
 
         public Entity()
         {
             Id = Guid.NewGuid();
-            Timestamp = DateTime.Now;
             AggregateId = Id;
+            Timestamp = DateTime.Now;
         }
 
         public void AddNotification(string notification)
         {
-            ValidationResult.Errors.Add(new ValidationFailure(MessageType, notification));
+            _notifications.Add(new DomainNotification(MessageType, notification));
         }
 
-        public void AddNotifications(IList<ValidationFailure> erros)
+        public void AddNotifications(IReadOnlyCollection<DomainNotification> erros)
         {
             foreach(var error in erros)
+            {
+                _notifications.Add(error);
+            }
+        }
+
+        public void AddValidationResults(ValidationResult validation)
+        {
+            foreach (var error in validation.Errors)
             {
                 ValidationResult.Errors.Add(error);
             }

@@ -6,8 +6,8 @@ namespace SampleStoreCQRS.Domain.Core.ValueObjects
     public class Name : ValueObject<Name>
     {
 
-        public string FirstName { get; private set; }
-        public string LastName { get; private set; }
+        public virtual string FirstName { get; protected set; }
+        public virtual string LastName { get; protected set; }
 
         protected Name() { }
 
@@ -15,8 +15,12 @@ namespace SampleStoreCQRS.Domain.Core.ValueObjects
         {
             FirstName = firstName;
             LastName = lastName;
+        }        
 
+        public override bool IsValid()
+        {
             ValidationResult = new NameValidation().Validate(this);
+            return ValidationResult.IsValid;
         }
 
         public override string ToString()
@@ -41,9 +45,6 @@ namespace SampleStoreCQRS.Domain.Core.ValueObjects
             }
         }
 
-        public override bool IsValid()
-        {
-            return ValidationResult.IsValid;
-        }
+        
     }
 }

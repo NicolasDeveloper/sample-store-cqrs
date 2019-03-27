@@ -7,12 +7,14 @@ namespace SampleStoreCQRS.Domain.Core.ValueObjects
     public class CreditCard : ValueObject<CreditCard>, IPaymentMethod
     {
 
-        public string Number { get; private set; }
-        public int Cvv { get; private set; }
-        public string Validate { get; private set; }
-        public string PrintName { get; private set; }
+        public virtual string Number { get; protected set; }
+        public virtual int Cvv { get; protected set; }
+        public virtual string Validate { get; protected set; }
+        public virtual string PrintName { get; protected set; }
 
-        protected CreditCard() { }
+        protected CreditCard() {
+            ;
+        }
 
         public CreditCard(string number, int cvv, string validate, string printName)
         {
@@ -21,14 +23,15 @@ namespace SampleStoreCQRS.Domain.Core.ValueObjects
             Validate = validate;
             PrintName = printName;
 
-            ValidationResult = new CreditCardValidation().Validate(this);
         }
 
         public override bool IsValid()
         {
+            ValidationResult = new CreditCardValidation().Validate(this);
             return ValidationResult.IsValid;
         }
 
+        
         protected override bool EqualsCore(CreditCard other)
         {
             return Number == other.Number &&

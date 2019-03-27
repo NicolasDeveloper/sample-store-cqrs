@@ -8,7 +8,7 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
 {
     public class Payment : Aggregate
     {
-        public CreditCard CreditCard { get; private set; }
+        public virtual CreditCard CreditCard { get; protected set; }
 
         protected Payment() { }
 
@@ -20,12 +20,13 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
                 CreditCard = paymentMethod as CreditCard;
             }
 
-            ValidationResult = new PaymentValidation().Validate(this);
-            AddNotifications(paymentMethod.ValidationResult.Errors);
+            if(!paymentMethod.IsValid())
+                AddValidationResults(paymentMethod.ValidationResult);
         }
-
+        
         public override bool IsValid()
         {
+            ValidationResult = new PaymentValidation().Validate(this);
             return ValidationResult.IsValid;
         }
     }

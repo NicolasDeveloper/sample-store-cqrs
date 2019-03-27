@@ -19,9 +19,28 @@ namespace SampleStoreCQRS.Application.Services
             Bus = bus;
         }
 
-        public Task Register(OrderViewModel customerViewModel)
+
+        public Task Place(PlaceOrderViewModel customerViewModel)
         {
             var placeCommand = _mapper.Map<PlaceOrderCommand>(customerViewModel);
+            return Bus.SendCommand(placeCommand);
+        }
+
+        public Task Pay(PayOrderViewModel customerViewModel)
+        {
+            var placeCommand = _mapper.Map<PayOrderCommand>(customerViewModel);
+            return Bus.SendCommand(placeCommand);
+        }
+
+        public Task Ship(ShipOrderViewModel customerViewModel)
+        {
+            var placeCommand = _mapper.Map<ShipOrderCommand>(customerViewModel);
+            return Bus.SendCommand(placeCommand);
+        }
+
+        public Task Cancel(CancelOrderViewModel customerViewModel)
+        {
+            var placeCommand = _mapper.Map<CancelOrderCommand>(customerViewModel);
             return Bus.SendCommand(placeCommand);
         }
     }

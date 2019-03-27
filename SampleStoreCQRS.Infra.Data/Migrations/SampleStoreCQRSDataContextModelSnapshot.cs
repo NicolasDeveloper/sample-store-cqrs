@@ -24,6 +24,8 @@ namespace SampleStoreCQRS.Infra.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid>("AggregateId");
+
                     b.Property<string>("Phone");
 
                     b.HasKey("Id");
@@ -35,6 +37,8 @@ namespace SampleStoreCQRS.Infra.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("AggregateId");
 
                     b.Property<DateTime>("CreateAt");
 
@@ -66,6 +70,8 @@ namespace SampleStoreCQRS.Infra.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid>("AggregateId");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1024);
@@ -92,6 +98,8 @@ namespace SampleStoreCQRS.Infra.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid>("AggregateId");
+
                     b.HasKey("Id");
 
                     b.ToTable("Payments");
@@ -101,6 +109,8 @@ namespace SampleStoreCQRS.Infra.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("AggregateId");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -125,6 +135,8 @@ namespace SampleStoreCQRS.Infra.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("AggregateId");
 
                     b.Property<string>("Cod");
 

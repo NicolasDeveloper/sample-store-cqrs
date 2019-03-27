@@ -5,10 +5,10 @@ namespace SampleStoreCQRS.Domain.Core.ValueObjects
 {
     public class Document : ValueObject<Document>
     { 
-        public string Number { get; private set; }
-
-
-        protected Document() { }
+        public virtual string Number { get; protected set; }
+        
+        protected Document() {
+        }
 
         public Document(string number)
         {

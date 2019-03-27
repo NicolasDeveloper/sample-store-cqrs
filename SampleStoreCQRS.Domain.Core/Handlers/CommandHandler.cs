@@ -33,11 +33,19 @@ namespace SampleStoreCQRS.Domain.Core.Handlers
             }
         }
 
-        protected void NotifyValidationErrors(Entity message)
+        protected void NotifyValidationErrors(Entity entity)
         {
-            foreach (var error in message.ValidationResult.Errors)
+            foreach (var error in entity.ValidationResult.Errors)
             {
-                _bus.RaiseEvent(new DomainNotification(message.MessageType, error.ErrorMessage));
+                _bus.RaiseEvent(new DomainNotification(entity.MessageType, error.ErrorMessage));
+            }
+        }
+
+        protected void DisparchNotifications(Entity entity)
+        {
+            foreach (var notification in entity.Notifications)
+            {
+                _bus.RaiseEvent(notification);
             }
         }
 

@@ -6,24 +6,25 @@ namespace SampleStoreCQRS.Domain.Core.ValueObjects
 {
     public class DiscountCupon : ValueObject<DiscountCupon>
     {
-        public string Cod { get; private set; }
-        public decimal Percentage { get; private set; }
-        public Period ValidadePeriod { get; private set; }
+        public virtual string Cod { get; protected set; }
+        public virtual decimal Percentage { get; protected set; }
+        public virtual Period ValidadePeriod { get; protected set; }
         public virtual bool Expired => ValidadePeriod.Start < DateTime.Now && ValidadePeriod.End < DateTime.Now;
 
-        protected DiscountCupon() { }
+        protected DiscountCupon() {
+            
+        }
 
         public DiscountCupon(string cod, decimal percentage, Period validate)
         {
             Cod = cod;
             Percentage = percentage;
             ValidadePeriod = validate;
-
-            ValidationResult = new DiscountCouponValidation().Validate(this);
         }
 
         public override bool IsValid()
         {
+            ValidationResult = new DiscountCouponValidation().Validate(this);
             return ValidationResult.IsValid;
         }
 

@@ -1,27 +1,21 @@
-﻿using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Enuns;
-using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models;
-using SampleStoreCQRS.Domain.Core.Events;
+﻿
+
 using System;
+using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Enuns;
+using SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models;
 
 namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Events
 {
-    public class OrderStatusChangedEvent : Event
+    public class OrderStatusChangedEvent : OrderEvent
     {
-        public Guid Id { get; private set; }
-        public Customer Customer { get; private set; }
-        public string Number { get; private set; }
-        public EOrderStatus Status { get; private set; }
-
         public OrderStatusChangedEvent(
             Guid id, 
-            Customer customer, 
+            Guid customerId, 
+            string number, 
             EOrderStatus status, 
-            string number)
+            decimal total, 
+            decimal totalWithDiscount) : base(id, customerId, number, status, total, totalWithDiscount)
         {
-            Id = id;
-            Number = number;
-            Customer = customer;
-            Status = status;
         }
     }
 }

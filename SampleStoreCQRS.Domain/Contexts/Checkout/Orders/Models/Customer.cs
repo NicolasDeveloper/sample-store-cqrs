@@ -6,10 +6,10 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
 {
     public class Customer : Aggregate
     {
-        public Name Name { get; private set; }
-        public Email Email { get; private set;  }
-        public string Phone { get; private set; }
-        public Document Document { get; private set; }
+        public virtual Name Name { get; protected set; }
+        public virtual Email Email { get; protected set;  }
+        public virtual string Phone { get; protected set; }
+        public virtual Document Document { get; protected set; }
 
         protected Customer() { }
 
@@ -19,12 +19,11 @@ namespace SampleStoreCQRS.Domain.Contexts.Checkout.Orders.Models
             Email = email;
             Phone = phone;
             Document = document;
-
-            ValidationResult = new CustomerValidation().Validate(this);
         }
-
+        
         public override bool IsValid()
         {
+            ValidationResult = new CustomerValidation().Validate(this);
             return ValidationResult.IsValid;
         }
     }
